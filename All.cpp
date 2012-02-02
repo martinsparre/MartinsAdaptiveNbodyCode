@@ -33,7 +33,7 @@ Simulation::Simulation(void){
 
 
 void Simulation::Run(void){
-	
+//Run simulation	
 	int SnapshotsWritten = 0;
 	long int NextSnapshotTime = SnapshotTimes.at(SnapshotsWritten);
 	long int SmallestStep=1;
