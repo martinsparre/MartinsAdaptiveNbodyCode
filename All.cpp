@@ -89,7 +89,7 @@ void Simulation::ReadGadget2IC(void){
     if (!P)
     std::cout << "could not allocate memory... q234edqwj" <<std::endl;
 
-    File = fopen("dmhalo1.dat","r+");
+    File = fopen("IC/dmhalo1.dat","r+");
     if(!File)
     std::cout << "could not find file... asdfvmp" << std::endl;
         
