@@ -1,33 +1,39 @@
 #include "All.h"
 
 
+
 int main(){
-	Simulation *Sim = new Simulation();
+//	Simulation *Sim = new Simulation();
 	//Sim->Initialize();
 	//Sim->ReadGadget2IC();
-	Particle *P1 = Sim->GetP();
+//	Particle *P1 = Sim->GetP();
 	
-	std::cout << P1[0].GetPos(0) << std::endl;
-	
-	Sim->Run();
+//	Sim->Run();
 
 
 
-/* int i;
+ int i;
    double x,y,z,vx,vy,vz,m;
    Particle *P = NULL;
 
     FILE *Filename;
-    
-    P = new Particle[2048];
+
+
+
+
+	#define N_TEST 100000
+    P = new Particle[N_TEST];
     if (!P)
     std::cout << "could not allocate memory... q234edqwj" <<std::endl;
 
-    Filename = fopen("dmhalo1.dat","r+");
+
+
+
+    Filename = fopen("IC/Hq1e5.txt","r+");
     if(!Filename)
     std::cout << "could not find file... asdfvmp" << std::endl;
-        
-    for (i=0;i<2048;i++)
+    
+    for (i=0;i<N_TEST;i++)
     {
 			fscanf(Filename, "%lf", &x);
 			fscanf(Filename, "%lf", &y);
@@ -36,7 +42,7 @@ int main(){
 			fscanf(Filename, "%lf", &vy);
 			fscanf(Filename, "%lf", &vz);
 			fscanf(Filename, "%lf", &m);
-			P[i].Set(x,y,z,vx,vy,vz,m,0.005);
+			P[i].Set(x,y,z,vx,vy,vz,m,0.005,i);
     }
 	
 	int k=0;
@@ -44,14 +50,18 @@ int main(){
 	class Node *Root = NULL;	
 	
 	Root = new Node();
-	Root->CreateRoot(P,2048);
-	Root->CreateNodes(P,2048);
-	Root->ComputeMass(P,2048);
-	Root->ComputeCM(P,2048,0);
-	Root->ComputeCM(P,2048,1);
-	Root->ComputeCM(P,2048,2);
-	std::cout << 	Root->ComputeCM(P,2048,0) << " " << Root->ComputeCM(P,2048,1) <<" " << Root->ComputeCM(P,2048,2) << std::endl;
-	Root->DestroyNode();
+	Root->CreateRoot(P,N_TEST);
+	Root->CreateNodes(P,N_TEST);
+
+	Root->ComputeMass(P,N_TEST);
+	Root->ComputeCM(P,N_TEST,0);
+	Root->ComputeCM(P,N_TEST,1);
+	Root->ComputeCM(P,N_TEST,2);
+//	std::cout << 	Root->ComputeCM(P,N_TEST,0) << " " << Root->ComputeCM(P,N_TEST,1) <<" " << Root->ComputeCM(P,N_TEST,2) << std::endl;
+	//Root->DestroyNode();	
+	
+	
+	
 	
 	
 	//make this
@@ -59,21 +69,29 @@ int main(){
 //	for(unsigned int i=0;i<N;i++)
 //	P[0].CalcGravAccel(P,Root);
 //	P[0].SetAcceleration( Root->ComputeAcc   )
+	double r;
+//	#pragma omp parallel
 
+			#pragma omp parallel for private(i,r)
+			for(i=0; i<N_TEST; i++){
+
+				r = pow( pow(P[i].Pos[0],2) + pow(P[i].Pos[1],2) + pow(P[i].Pos[2],2) ,0.5);
+				P[i].ComputeGravPotential(Root,P);
+			//	std::cout << r << "\t" <<P[i].GravPotential << std::endl;
+			}
 
 
 
 	double meanx = 0.0,meany = 0.0,meanz = 0.0 ;
-	for (int i=0; i<2048; i++)
-	{
+	for (int i=0; i<N_TEST; i++){
 		meanx += P[i].GetPos(0);
 		meany += P[i].GetPos(1);
 		meanz += P[i].GetPos(2);
 	}
 
-	std::cout << meanx/2048.0 << " " << meany/2048.0 << " " << meanz/2048.0 << std::endl;
+//	std::cout << meanx/N_TEST << " " << meany/N_TEST << " " << meanz/N_TEST << std::endl;
 
-*/
+//	std::cout << 	Root->CM[1] << " " << Root->M << std::endl;
 
 
 /* Debug stuff - check tree construction	*/

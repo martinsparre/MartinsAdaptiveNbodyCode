@@ -8,19 +8,19 @@
 
 //define integer time....
 class Particle {
-
-    double m,Pos[3],Vel[3],Acc[3], Pot, Softening;
-    unsigned int ID;
+	public:
+    double m,Pos[3],Vel[3],Acc[3], Pot, Softening,GravPotential;
+    unsigned int ID,ThisParticleNumber;
     double Color;
     int TimeStepBegin;
     int TimeStepEnd;
     int KickTime;
     int DriftTime;
     
-	public:
+
 		Particle (){Color=0.0;};
-		Particle (double ,double ,double ,double ,double ,double ,double ,double);
-		void Set (double ,double ,double ,double ,double ,double ,double ,double);
+		Particle (double ,double ,double ,double ,double ,double ,double ,double, unsigned int);
+		void Set (double ,double ,double ,double ,double ,double ,double ,double, unsigned int);
 		void AdvancePos(double );
 		void AdvanceVel(double );
 		void SetPos(double, double, double);
@@ -34,11 +34,12 @@ class Particle {
 		void PrintInfo(void);
 		void SetColor(double);
         double GetColor(void);
+		void ComputeGravPotential(class Node *A,class Particle *P);
 };
 
 
 class Node {
-	
+    public:	
 	unsigned int *IDs;
 	double xMin,yMin,zMin,xMax,yMax,zMax, LengthOfBox;
     double M,CM[3],CMVel[3],t;
@@ -46,7 +47,7 @@ class Node {
     unsigned short int EndNode;
     std::vector<unsigned int> Members;
 
-    public:
+
 	    Node();
 	    void CreateRoot(class Particle *,unsigned int);
 	    void CreateNodes(class Particle *,unsigned int);
@@ -75,7 +76,6 @@ class Simulation {
 	double RealTimePerIntTimeStep;
 	
 	int NSnapshots;
-	
 	
 	std::vector<int> SnapshotTimes;
 	

@@ -71,7 +71,7 @@ void Node::CreateRoot(class Particle *P,unsigned int Np){
 
 void Node::CreateNodes(class Particle *P,unsigned int Np){
     
-	if(Members.size() > 100)//implement direct summation if N<10 (e.g.)
+	if(Members.size() > 40)//implement direct summation if N<10 (e.g.)
 	{
 		CreateChildren(P,Np);
 
@@ -229,7 +229,7 @@ double Node::ComputeCM(class Particle *P,unsigned int Np, int Dim){
 
 		return CM[Dim];
 	}
-	else if (Members.size() == 0)
+	else if (Members.size() == 0)//this else if can likely be removed...
 	{
 	    CM[Dim] = 0.0;
 	    return CM[Dim];
@@ -238,16 +238,11 @@ double Node::ComputeCM(class Particle *P,unsigned int Np, int Dim){
 	{
 	    
 		CM[Dim] = 0.0;
-	//	double Mtot = 0.0;
 		
 		for(unsigned int i=0;i<Members.size();i++)
 		{
     		CM[Dim] += P[Members.at(i)].GetMass()*P[Members.at(i)].GetPos(Dim);
-    //		Mtot += P[Members.at(i)].GetMass();
 		}
-		
-		//if (Mtot != GetNodeMass() )
-		//std::cout << Mtot << " " << GetNodeMass() << std::endl;	
 
 		if (GetNodeMass() > 0.0)
 		CM[Dim] /= GetNodeMass();
@@ -256,5 +251,46 @@ double Node::ComputeCM(class Particle *P,unsigned int Np, int Dim){
 	}
 }
 
+/*double Node::GetAcc(double x,double y,double z, int Dim){
+
+
+
+	if(EndNode != 1)
+	{
+	    a = 0.0;
+	    for (int i=0; i<8;i++)
+	    a += Children[i]->GetAcc(x,y,z,Dim);
+
+		return a;
+	}
+	else
+	{
+		a = 0.0;
+		for(unsigned int i=0;i<Members.size();i++){
+			double x_i[3],X[3];
+			X[0] = x;
+			X[1] = y;
+			X[2] = z;
+
+			x_i[0] = P[Members.at(i)].GetPos(0);
+			x_i[1] = P[Members.at(i)].GetPos(1);
+			x_i[2] = P[Members.at(i)].GetPos(2);
+			
+			double Eps2 = P[Members.at(i)].GetSoftening()*P[Members.at(i)].GetSoftening();
+			
+		 
+			m_i = P[Members.at(i)].GetMass();
+			r2 = pow(x_i[0]-X[0],2) + pow(y_i[0]-Y[0],2) + pow(z_i[0]-Z[0],2);
+			r = sqrt(r2);
+			
+			a += m_i /( (r2+Eps2)*r  ) * (x_i[Dim] - X[Dim] )  ;
+		}
+
+		return a;
+	}
+	
+	
+}
+*/
 
 

@@ -20,14 +20,12 @@ Simulation::Simulation(void){
 	RealTimePerIntTimeStep = dt_min;
 
 	Time = Tstart;
-
 	
 	NSnapshots = 10;
 	for (int i=0; i<NSnapshots;i++)
-		{SnapshotTimes.push_back(Tstart + (Tend - Tstart)/NSnapshots * i);
-		std::cout<< Tend<<std::endl;
-	}
+		SnapshotTimes.push_back(Tstart + (Tend - Tstart)/(NSnapshots) * i );
 
+	std::cout<< dt_min<< "Tend " << Tend<<"\t"<< Tend*RealTimePerIntTimeStep <<std::endl;
 }
 
 
@@ -39,7 +37,6 @@ void Simulation::Run(void){
 	long int SmallestStep=1;
 	
 	do{
-		
 			//create snapshot if necessary
 			if (Time >= NextSnapshotTime){
 				
@@ -61,11 +58,6 @@ void Simulation::Run(void){
 		
 		//advance particles... calc forces...
 		
-		
-		
-		
-
-
 
 		Time += SmallestStep;
 		
@@ -102,7 +94,7 @@ void Simulation::ReadGadget2IC(void){
 		fscanf(File, "%lf", &vy);
 		fscanf(File, "%lf", &vz);
 		fscanf(File, "%lf", &m);
-		P[i].Set(x,y,z,vx,vy,vz,m,0.005);
+		P[i].Set(x,y,z,vx,vy,vz,m,0.005,i);
     }
 };
 
