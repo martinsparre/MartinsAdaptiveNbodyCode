@@ -34,4 +34,4 @@ Node.o: $(SOURCE)
 	$(CC) $(CFLAGS) Node.cpp -c -o Node.o
 	
 clean:
-	rm -f $(OBJS) $(EXEC) logfile.log
+	rm -f $(OBJS) $(EXEC)
