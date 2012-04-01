@@ -34,7 +34,7 @@ class Particle {
 		void PrintInfo(void);
 		void SetColor(double);
         double GetColor(void);
-		void ComputeGravPotential(class Node *A,class Particle *P);
+		void ComputeGravPotentialAndAcc(class Node *A,class Particle *P);
 };
 
 

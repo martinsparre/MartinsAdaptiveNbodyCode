@@ -77,7 +77,7 @@ void Particle::PrintInfo(void){
 }
 
 
-void Particle::ComputeGravPotential(class Node *A, class Particle *P)
+void Particle::ComputeGravPotentialAndAcc(class Node *A, class Particle *P)
 {
 	double G = 1.0,OPENING_ANGLE = 0.5;
 
@@ -87,6 +87,13 @@ void Particle::ComputeGravPotential(class Node *A, class Particle *P)
 	if( r2 * OPENING_ANGLE*OPENING_ANGLE > A->LengthOfBox * A->LengthOfBox  )// || A->Members.size() < 2)
 	{
 		GravPotential = GravPotential - G*A->M/pow( r2 + pow(Softening,2)  ,0.5);
+		
+
+		double TEMP = - G*A->M/pow(  r2 + pow(Softening,2)  ,1.5);
+
+		Acc[0] = Acc[0] + TEMP * (Pos[0] - A->CM[0]);
+		Acc[1] = Acc[1] + TEMP * (Pos[1] - A->CM[1]);
+		Acc[2] = Acc[2] + TEMP * (Pos[2] - A->CM[2]);
 
 	}
 	else if( A->EndNode == 1)
@@ -97,6 +104,12 @@ void Particle::ComputeGravPotential(class Node *A, class Particle *P)
 
 			r2 = pow(Pos[0]-P[A->Members.at(i)].GetPos(0),2) + pow(Pos[1]-P[A->Members.at(i)].GetPos(1),2) + pow(Pos[2]-P[A->Members.at(i)].GetPos(2),2);
 			GravPotential = GravPotential - G*P[A->Members.at(i)].GetMass()/pow( r2 + pow(Softening,2)  ,0.5);
+
+            double TEMP = - G*A->M/pow(  r2 + pow(Softening,2)  ,1.5);
+
+		    Acc[0] = Acc[0] + TEMP * (Pos[0] - P[A->Members.at(i)].GetPos(0));
+		    Acc[1] = Acc[1] + TEMP * (Pos[1] - P[A->Members.at(i)].GetPos(1));
+		    Acc[2] = Acc[2] + TEMP * (Pos[2] - P[A->Members.at(i)].GetPos(2));
 			
 		}
 
@@ -104,7 +117,7 @@ void Particle::ComputeGravPotential(class Node *A, class Particle *P)
 	else
 	{
 		for(int i=0;i<8;i++)
-			ComputeGravPotential(A->Children[i],P);
+			ComputeGravPotentialAndAcc(A->Children[i],P);
 	}
 }
 

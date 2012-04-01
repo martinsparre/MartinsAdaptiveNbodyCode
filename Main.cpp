@@ -76,7 +76,7 @@ int main(){
 			for(i=0; i<N_TEST; i++){
 
 				r = pow( pow(P[i].Pos[0],2) + pow(P[i].Pos[1],2) + pow(P[i].Pos[2],2) ,0.5);
-				P[i].ComputeGravPotential(Root,P);
+				P[i].ComputeGravPotentialAndAcc(Root,P);
 			//	std::cout << r << "\t" <<P[i].GravPotential << std::endl;
 			}
 
