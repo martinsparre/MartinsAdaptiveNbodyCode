@@ -79,12 +79,30 @@ void Particle::PrintInfo(void){
 
 void Particle::ComputeGravPotentialAndAcc(class Node *A, class Particle *P)
 {
-	double G = 1.0,OPENING_ANGLE = 0.5;
 
-	double r2 = pow(Pos[0]-A->CM[0],2) + pow(Pos[1]-A->CM[1],2) + pow(Pos[2]-A->CM[2],2);
-//	double r = sqrt(r2);
+
+//	double r2 = pow(Pos[0]-A->CM[0],2) + pow(Pos[1]-A->CM[1],2) + pow(Pos[2]-A->CM[2],2);
+
+	double r2 = (Pos[0]-A->CM[0])*(Pos[0]-A->CM[0]) + (Pos[1]-A->CM[1])*(Pos[1]-A->CM[1]) + (Pos[2]-A->CM[2])*(Pos[2]-A->CM[2]);
+
+
+
+	#ifdef BARNES_1994
+		double r_CM_Center = sqrt(
+					pow(A->CM[0]-0.5*(A->xMin+A->xMax),2) + 
+					pow(A->CM[1]-0.5*(A->yMin+A->yMax),2) +
+					pow(A->CM[2]-0.5*(A->zMin+A->zMax),2)
+					);
+
+		int Criterion = (sqrt(r2) * OPENING_ANGLE > A->LengthOfBox  + OPENING_ANGLE * r_CM_Center   );
 	
-	if( r2 * OPENING_ANGLE*OPENING_ANGLE > A->LengthOfBox * A->LengthOfBox  )// || A->Members.size() < 2)
+	#else
+				
+		int Criterion = (r2 * OPENING_ANGLE2 > A->LengthOfBox * A->LengthOfBox);
+	
+	#endif
+
+	if( Criterion )// || A->Members.size() < 2)
 	{
 		GravPotential = GravPotential - G*A->M/pow( r2 + pow(Softening,2)  ,0.5);
 		
@@ -105,7 +123,7 @@ void Particle::ComputeGravPotentialAndAcc(class Node *A, class Particle *P)
 			r2 = pow(Pos[0]-P[A->Members.at(i)].GetPos(0),2) + pow(Pos[1]-P[A->Members.at(i)].GetPos(1),2) + pow(Pos[2]-P[A->Members.at(i)].GetPos(2),2);
 			GravPotential = GravPotential - G*P[A->Members.at(i)].GetMass()/pow( r2 + pow(Softening,2)  ,0.5);
 
-            double TEMP = - G*A->M/pow(  r2 + pow(Softening,2)  ,1.5);
+            double TEMP = - G* P[A->Members.at(i)].GetMass()/pow(  r2 + pow(Softening,2)  ,1.5);
 
 		    Acc[0] = Acc[0] + TEMP * (Pos[0] - P[A->Members.at(i)].GetPos(0));
 		    Acc[1] = Acc[1] + TEMP * (Pos[1] - P[A->Members.at(i)].GetPos(1));

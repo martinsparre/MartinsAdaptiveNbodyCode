@@ -3,8 +3,15 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <math.h>
+
+#define MIN_PARTICLES_IN_NODE (15)
+#define G 1.0
+#define OPENING_ANGLE 1.0
+#define OPENING_ANGLE2 1.0
+//#define BARNES_1994 1.0
 
 //define integer time....
 class Particle {
@@ -63,7 +70,7 @@ class Node {
 
 
 class Simulation {
-	double G;
+//	double G;
 	int StartTime;
 	int EndTime;
 	long int Time;

@@ -21,7 +21,7 @@ int main(){
 
 
 
-	#define N_TEST 100000
+	#define N_TEST 1000000
     P = new Particle[N_TEST];
     if (!P)
     std::cout << "could not allocate memory... q234edqwj" <<std::endl;
@@ -29,7 +29,7 @@ int main(){
 
 
 
-    Filename = fopen("IC/Hq1e5.txt","r+");
+    Filename = fopen("IC/Hq1e6.txt","r+");
     if(!Filename)
     std::cout << "could not find file... asdfvmp" << std::endl;
     
@@ -45,7 +45,7 @@ int main(){
 			P[i].Set(x,y,z,vx,vy,vz,m,0.005,i);
     }
 	
-	int k=0;
+
 
 	class Node *Root = NULL;	
 	
@@ -72,14 +72,27 @@ int main(){
 	double r;
 //	#pragma omp parallel
 
-			#pragma omp parallel for private(i,r)
-			for(i=0; i<N_TEST; i++){
+	std::cout << "Start force calculation" << std::endl;
 
-				r = pow( pow(P[i].Pos[0],2) + pow(P[i].Pos[1],2) + pow(P[i].Pos[2],2) ,0.5);
-				P[i].ComputeGravPotentialAndAcc(Root,P);
-			//	std::cout << r << "\t" <<P[i].GravPotential << std::endl;
-			}
+	#pragma omp parallel for private(i,r)
+	for(i=0; i<N_TEST; i++){
 
+		r = pow( pow(P[i].Pos[0],2) + pow(P[i].Pos[1],2) + pow(P[i].Pos[2],2) ,0.5);
+		P[i].ComputeGravPotentialAndAcc(Root,P);
+	//	std::cout << r << "\t" <<P[i].GravPotential << std::endl;
+	}
+
+	std::cout << "End force calculation" << std::endl;
+
+	std::ofstream myfile ("V.txt");
+	
+	for(i=0; i<N_TEST; i++){
+		r = pow( pow(P[i].Pos[0],2) + pow(P[i].Pos[1],2) + pow(P[i].Pos[2],2) ,0.5);
+		myfile << r << "\t" <<P[i].GravPotential << "\t" << pow( pow(P[i].Acc[0],2) + pow(P	[i].Acc[1],2) + pow(P[i].Acc[2],2) ,0.5)  <<"\n";
+	}
+
+
+	myfile.close();
 
 
 	double meanx = 0.0,meany = 0.0,meanz = 0.0 ;

@@ -8,7 +8,7 @@ Simulation::Simulation(void){
 	//Read some parameter file. set G and softening
 	//call ReadGadget2IC and set P
 	ReadGadget2IC();
-	G = 1.0;
+//	G = 1.0;
 
 	StartTime = 0.0;
 	EndTime = 100.;

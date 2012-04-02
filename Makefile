@@ -5,8 +5,8 @@ CFLAGS= -Wall  $(OPT) -O2  #-g
 #"-pg" is for "gprof"
 # gprof Tree gmon.out > profile_gcc_gravity.txt
 
-CC=icc -openmp -I/usr/include/i386-linux-gnu/
-CFLAGS=   -O2 -w1 -Wall $(OPT)
+#CC=icc -openmp -I/usr/include/i386-linux-gnu/
+#CFLAGS=   -O2 -w1 -Wall $(OPT)
 
 
 #CFLAGS += -pedantic
